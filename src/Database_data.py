@@ -6,7 +6,7 @@ def Person_DB():
         port = 33066, 
         user = 'root', 
         passwd = 'Qazwsx11',
-        database = "Person"
+        database = "Brew_App"
         )
     cursor = connection.cursor()
     cursor.execute("SELECT Person_Name, Person_Age FROM Person")
