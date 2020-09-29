@@ -10,12 +10,13 @@ import src.classes.app_classes as AC
 
 # PLANS FOR EXTRA FUNCTIONALITY:
 
-# Find way to select people efficiently - maybe use numbering system or name initials
+# DONE: Find way to select people efficiently - maybe use numbering system or name initials
 # Potentially -- add age func/class
 # DONE: Check against favourite drink
-# Ask if they'd like to add another preference, by name.
-# Add remove drinks/people functions
+# DONE: Ask if they'd like to add another preference, by name.
+# DONE: Add remove drinks/people functions
     
+
 
 # Create the menu with user input
 
