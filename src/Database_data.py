@@ -2,10 +2,10 @@ import pymysql
 
 def Person_DB():
     connection = pymysql.connect(
-        host = 'localhost', 
-        port = 33066
+        host = 'localhost',
+        port = 33066, 
         user = 'root', 
-        passwd = 'Qazwsx11'
+        passwd = 'Qazwsx11',
         database = "Person"
         )
     cursor = connection.cursor()
@@ -14,7 +14,7 @@ def Person_DB():
     rows = cursor.fetchall()
     cursor.close()
     connection.close()
-    
+
     for row in rows:
         print(row)
 
