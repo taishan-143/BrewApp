@@ -27,7 +27,7 @@ def Drink_DB():
         database = "Brew_App"
         )
     cursor = connection.cursor()
-    cursor.execute("SELECT DrinkName, Alcoholic FROM Person")
+    cursor.execute("SELECT DrinkName, Alcoholic FROM Drinks")
     connection.commit()
     rows = cursor.fetchall()
     cursor.close()
@@ -38,4 +38,5 @@ def Drink_DB():
 
 
 Person_DB()
+print("\n")
 Drink_DB()
