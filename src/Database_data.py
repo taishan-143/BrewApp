@@ -20,11 +20,16 @@ def Person_DB():
     cursor.close()
     connection.close()
 
+    people_dic_list = []
     for row in rows:
-        people_dic = {}
-        ID, Name = PersonID, Person_Name
-        people_dic[ID] = Name
+        people_dic_list.append(row)
+        people_dic = dict(people_dic_list)
+    print(people_dic)
 
+
+# filter the data needed
+# replace csv data persistence with database management
+# refactor code for database management
 
 
 def Drink_DB():
@@ -36,18 +41,22 @@ def Drink_DB():
         database = "Brew_App"
         )
     cursor = connection.cursor()
-    cursor.execute("SELECT DrinkName, Alcoholic FROM Drinks")
+    cursor.execute("SELECT DrinkID, DrinkName FROM Drinks")
     connection.commit()
     rows = cursor.fetchall()
     cursor.close()
     connection.close()
-
+    drinks_dic_list = []
     for row in rows:
-        people_dic_list = []
-        people_dic_list.append(row)
-        people_dic = dict(people_dic_list)
+        drinks_dic_list.append(row)
+        drinks_dic = dict(drinks_dic_list)
+    print(drinks_dic)
+    
+
+
+   
 
 
 Person_DB()
 print("\n")
-#Drink_DB()
+Drink_DB()
