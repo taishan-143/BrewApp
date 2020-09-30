@@ -43,8 +43,8 @@ data_transform = data_transformation(db_data)
 
 def save_items_to_csv(filepath, data):
     try:
-        with open(filepath, 'w') as data_file:
-            csv_writer = csv.writer(data_file, quoting = csv.QUOTE_ALL)
+        with open(filepath, 'w', newline ='') as data_file:
+            csv_writer = csv.writer(data_file, quoting = csv.QUOTE_NONE)
             for item in data:
                 csv_writer.writerow([item[0], item[1], item[2], item[3], item[4], item[5]])
     except:
