@@ -7,14 +7,15 @@ from src.functions.table_function import table, table_width
 import src.classes.save_load as SL
 import src.functions.app_methods as AM
 import src.classes.app_classes as AC
+import src.Database_data as DB
 
 # PLANS FOR EXTRA FUNCTIONALITY:
 
-# Find way to select people efficiently - maybe use numbering system or name initials
+# DONE: Find way to select people efficiently - maybe use numbering system or name initials
 # Potentially -- add age func/class
 # DONE: Check against favourite drink
-# Ask if they'd like to add another preference, by name.
-# Add remove drinks/people functions
+# DONE: Ask if they'd like to add another preference, by name.
+# DONE: Add remove drinks/people functions
     
 
 # Create the menu with user input
@@ -61,12 +62,16 @@ def app_start():
         view_menu = True
         menu()                                                                      # show the menu
         # initial assignment of lists
-        people = SL.LoadData().load_items('src/data/names.csv')
-        drinks = SL.LoadData().load_items('src/data/drinks.csv')
+        # people = SL.LoadData().load_items('src/data/names.csv')
+        # drinks = SL.LoadData().load_items('src/data/drinks.csv')
+        people = DB.Person_DB().values()
+        drinks = DB.Drink_DB().values()
         drinks_preferences = SL.LoadData().load_preferences('src/data/new_preferences.csv')    
-        new_preference = AC.Preferences()                               
-        people_dic =  new_preference.data_dictionary(people)                         # create people dictionary
-        drinks_dic =  new_preference.data_dictionary(drinks)                         # create drinks dictionary
+        # new_preference = AC.Preferences()                               
+        # people_dic =  new_preference.data_dictionary(people)                         # create people dictionary
+        # drinks_dic =  new_preference.data_dictionary(drinks)                         # create drinks dictionary
+        people_dic = DB.Person_DB()
+        drinks_dic = DB.Drink_DB()
        
         while view_menu:                                                            # Loop for decision making, accounting for mistakes
             try:    
@@ -119,11 +124,11 @@ def app_start():
                     print("\nThanks for stopping by, see you soon!\n")
                     exit()
                 else: 
-                    print("\nSorry I dont understand.\nPlease choose between 1 and 8.")
+                    print("\nSorry I dont understand.\nPlease choose between 1 and 10.")
             except ValueError as v:                                                             # Raised if anything other than an integer is input.
                 print('\n')
                 print(v)
-                print("That is not an integer between 1 and 8, try again!")
+                print("That is not an integer between 1 and 10, try again!")
             except NameError as n:                                                              # Raised if the preferences list is opened without 
                 print('\n')                                                                     # assigning people to drinks
                 print(n)
