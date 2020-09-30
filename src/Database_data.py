@@ -1,10 +1,5 @@
 import pymysql
 
-
-class Person:
-    def __init__(self):
-        pass
-
 def Person_DB():
     connection = pymysql.connect(
         host = 'localhost',
@@ -24,7 +19,8 @@ def Person_DB():
     for row in rows:
         people_dic_list.append(row)
         people_dic = dict(people_dic_list)
-    print(people_dic)
+
+    return people_dic
 
 
 # filter the data needed
@@ -50,13 +46,11 @@ def Drink_DB():
     for row in rows:
         drinks_dic_list.append(row)
         drinks_dic = dict(drinks_dic_list)
-    print(drinks_dic)
+
+    return drinks_dic
     
 
 
-   
-
-
-Person_DB()
-print("\n")
-Drink_DB()
+# people_DIC = Person_DB()
+# print("\n")
+# drinks_DIC = Drink_DB()
