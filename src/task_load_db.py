@@ -17,9 +17,6 @@ def data_extraction(filepath):     # load the csv file
             return data_list
     except Exception:
         print("Failure opening file!")
-    
-
-db_data = data_extraction('src/data/Import_User_Sample_en.csv')
 
     
 def data_transformation(data):
@@ -43,8 +40,6 @@ def data_transformation(data):
     return final_data
     
 
-data_transform = data_transformation(db_data)
-print(data_transform)
 
 def data_loading_to_the_database(data):
     connection = pymysql.connect(
@@ -56,35 +51,17 @@ def data_loading_to_the_database(data):
         )
     cursor = connection.cursor()
     for person_data in data:
-        #print(tuple(person_data))
         cursor.execute("INSERT INTO PersonImport (User_Name, First_Name, Surname, Job_Title, Mobile_No, Post_Code) VALUES (%s, %s, %s, %s, %s, %s)", person_data)
 
     connection.commit()
-    # rows = cursor.fetchall()
     cursor.close()
     connection.close()
 
-data_loading_to_the_database(data_transform)
 
+db_data = data_extraction('src/data/Import_User_Sample_en.csv')   # import csv file and extract the data needed
+data_transform = data_transformation(db_data)                     # transform said data, splitting the name into first and last
+data_loading_to_the_database(data_transform)                      # upload to the database
 
-
-
-
-
-
-
-
-
-# def save_items_to_csv(filepath, data):
-#     try:
-#         with open(filepath, 'w', newline ='') as data_file:
-#             csv_writer = csv.writer(data_file, quoting = csv.QUOTE_NONE)
-#             for item in data:
-#                 csv_writer.writerow([item[0], item[1], item[2], item[3], item[4], item[5]])
-#     except:
-#         print("Failure opening file!")
-
-# save_items_to_csv('src/data/Upload_to_database.csv', data_transform)
 
 
 
