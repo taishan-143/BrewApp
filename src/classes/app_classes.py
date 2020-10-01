@@ -1,6 +1,6 @@
 #Classes for the main app
 import csv
-from table_function import table, table_width
+from src.functions.table_function import table, table_width
 
 class Round:
     def __init__(self, people, drinks, round_owner):
