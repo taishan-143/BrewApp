@@ -62,16 +62,12 @@ def app_start():
         view_menu = True
         menu()                                                                      # show the menu
         # initial assignment of lists
-        # people = SL.LoadData().load_items('src/data/names.csv')
-        # drinks = SL.LoadData().load_items('src/data/drinks.csv')
-        people = DB.Person_DB().values()
-        drinks = DB.Drink_DB().values()
+        people = SL.LoadData().load_items('src/data/names.csv')
+        drinks = SL.LoadData().load_items('src/data/drinks.csv')
         drinks_preferences = SL.LoadData().load_preferences('src/data/new_preferences.csv')    
-        # new_preference = AC.Preferences()                               
-        # people_dic =  new_preference.data_dictionary(people)                         # create people dictionary
-        # drinks_dic =  new_preference.data_dictionary(drinks)                         # create drinks dictionary
-        people_dic = DB.Person_DB()
-        drinks_dic = DB.Drink_DB()
+        new_preference = AC.Preferences()                               
+        people_dic =  new_preference.data_dictionary(people)                         # create people dictionary
+        drinks_dic =  new_preference.data_dictionary(drinks)                         # create drinks dictionary
        
         while view_menu:                                                            # Loop for decision making, accounting for mistakes
             try:    
