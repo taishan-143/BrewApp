@@ -7,6 +7,7 @@ from src.functions.table_function import table, table_width
 import src.classes.save_load as SL
 import src.functions.app_methods as AM
 import src.classes.app_classes as AC
+import src.Database_data as DB
 
 # PLANS FOR EXTRA FUNCTIONALITY:
 
@@ -120,11 +121,11 @@ def app_start():
                     print("\nThanks for stopping by, see you soon!\n")
                     exit()
                 else: 
-                    print("\nSorry I dont understand.\nPlease choose between 1 and 8.")
+                    print("\nSorry I dont understand.\nPlease choose between 1 and 10.")
             except ValueError as v:                                                             # Raised if anything other than an integer is input.
                 print('\n')
                 print(v)
-                print("That is not an integer between 1 and 8, try again!")
+                print("That is not an integer between 1 and 10, try again!")
             except NameError as n:                                                              # Raised if the preferences list is opened without 
                 print('\n')                                                                     # assigning people to drinks
                 print(n)

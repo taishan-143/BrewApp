@@ -1,32 +1,58 @@
 import pymysql
+import os
 from src.classes.app_classes import Round, Preferences, Person, Drink
 from src.functions.table_function import table, table_width 
 
-def assign_preference(people_dic, drinks_dic, people, drinks): 
-    selected_name = []                                                              # list to check no multiple assignments occur 
+def assign_preference(people_dic, drinks_dic): 
+    selected_name = []               # list to check no multiple assignments occur 
+    preferences = {}
     not_chosen_preference = True
     while not_chosen_preference:  
         new_preference = Preferences()
-        Name = new_preference.choose_name(people_dic, selected_name, people)        # get a person from the names file
-        Drink = new_preference.choose_drink(drinks_dic, drinks)                     # get a drink from the drinks file
+        NameID = new_preference.choose_name(people_dic, selected_name)        # get a person from the names file
+        DrinkID = new_preference.choose_drink(drinks_dic)                     # get a drink from the drinks file
 
-        new_preference.add_to_database(Name, Drink)
-        not_chosen_preference = new_preference.add_another()  
+        #first_name = Name.split()[0]   # Take the first name for database use
+        new_preference.add_to_database(NameID, DrinkID)  # add the preference to the database
+        if len(selected_name) == len(people_dic.keys()):
+            break
+        else:
+            not_chosen_preference = new_preference.add_another()   # give an option to add another
 
-        selected_name.append(Name)
-    
-# To solve overwriting issue:
-# Append to pre-existing preferences dictionary
-# delete repeat values. 
+        
+        preferences[people_dic[NameID]] = drinks_dic[DrinkID]
+        selected_name.append(NameID) 
+        people_dic.pop(NameID)       
+        
+    return preferences
 
-# edit preferences display to grab persons drink ID and the drink!
+def access_preferences():
+    try:
+        connection = pymysql.connect(
+            host = 'localhost',
+            port = 33066, 
+            user = 'root', 
+            passwd = 'Qazwsx11',
+            database = "Brew_App"
+            )
+        cursor = connection.cursor()
+        cursor.execute("SELECT Person.Person_First_Name, Drinks.DrinkName FROM Person INNER JOIN Drinks ON Person.Favourite_Drink = Drinks.DrinkID")
+        data = cursor.fetchall()
+        connection.commit()
+        cursor.close()
+    except Exception:
+        print("Failure reading from the database")
+    finally:
+        connection.close()
+    return data
 
-def preferences_display(header, data):                           
-    items = [] 
-    [items.append(f"{name}'s favourite drink: {data[name]}") for name in data.keys()]
-    table(header, items)
-
-
+def display_preferences(data):
+    preferences = []
+    for items in data:
+        name, drink = items[0], items[1]
+        preference = f"{name}'s favourite drink: {drink}"
+        preferences.append(preference)
+    table('PREFERENCES', preferences)
 
 
 def Load_People():
@@ -69,22 +95,18 @@ def Load_Drinks():
     rows = cursor.fetchall()
     cursor.close()
     connection.close()
+    
     drinks_dic_list = []
     for row in rows:
         drinks_dic_list.append(row)
         drinks_dic = dict(drinks_dic_list)
-
     return drinks_dic
 
 
-def continue_operation(header, action):
-    if header == 'DRINKS':
-        item = 'drink' 
-    else:
-        item = 'person'
+def continue_operation(message):
     not_chosen_option = True
     while not_chosen_option:
-        option = input(f"Would you like to {action} another {item}, Y or N?:  ").title()
+        option = input(message + ", Y or N?:  ").title()
         if option == 'Y':
             return True
             not_chosen_option = False
@@ -92,7 +114,7 @@ def continue_operation(header, action):
             return False
             not_chosen_option = False
         else:
-            print("Sorry, I don't understand")
+            print("\nSorry, I don't understand")
             not_chosen_option = True
 
 def add_person(header):
@@ -102,16 +124,24 @@ def add_person(header):
         person_data = person.input_person()
         person.save_person_to_database(person_data)
         print(f"Successfully added {person_data[0]} to the app!")
-        not_added_person = continue_operation(header, 'add')
+        not_added_person = continue_operation("\nWould you like to add another person")
 
 def remove_person(header, data):
     not_removed_person = True
     while not_removed_person:
-        person = Person()
-        table(header, data)
-        name = person.remove_person_from_database(data)
-        print(f"Goodbye {name}! See you soon!")
-        not_removed_person = continue_operation(header, 'remove')
+        if len(data.values()) == 0:
+            print("\nThere are no people to remove")
+            break
+        else:
+            person = Person()
+            table(header, data)
+            name = person.remove_person_from_database(data)
+            print(f"Goodbye {name}! See you soon!")
+            if len(data.values()) > 0:
+                not_removed_person = continue_operation("\nWould you like to remove another person")
+            else:
+                print("All people have been removed!")
+                not_removed_person = False
 
 def add_drink(header):
     not_added_drink = True
@@ -120,16 +150,37 @@ def add_drink(header):
         drink_name = drink.input_drink()
         alcoholic_drink = drink.is_alcoholic()
         drink.save_drink_to_database(drink_name, alcoholic_drink)
-        not_added_drink = continue_operation(header, 'add')
+        not_added_drink = continue_operation("\nWould you like to add another drink")
 
 def remove_drink(header, data):
     not_removed_drink = True
     while not_removed_drink:
-        drink = Drink()
-        table(header, data)
-        deleted_drink = drink.remove_drink_from_database(data)
-        print(f"You have removed {deleted_drink} from the list of drinks")
-        not_removed_drink = continue_operation(header, 'remove')
+        if len(data.values()) == 0:
+            print("\nThere are no drinks to remove")
+            break
+        else:
+            drink = Drink()
+            table(header, data)
+            deleted_drink = drink.remove_drink_from_database(data)
+            print(f"You have removed {deleted_drink} from the list of drinks")
+            if len(data.values()) > 0:
+                not_removed_drink = continue_operation("\nWould you like to remove another drink")
+            else:
+                print("All drinks have been removed!")
+                not_removed_drink = False
+
+def clear():
+    os.system("clear")
+
+def connect_to_database():
+    connection = pymysql.connect(
+        host = 'localhost',
+        port = 33066, 
+        user = 'root', 
+        passwd = 'Qazwsx11',
+        database = "Brew_App"
+        )
+    cursor = connection.cursor()
+    print("Connected to the database")
 
 
-# SORT OUT AUTO INCREMENT ISSUE!!
