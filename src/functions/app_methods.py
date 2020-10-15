@@ -183,4 +183,3 @@ def connect_to_database():
     cursor = connection.cursor()
     print("Connected to the database")
 
-

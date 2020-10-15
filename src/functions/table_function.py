@@ -17,7 +17,6 @@ def table_width(header, data):     # calculates the width of the table needed fo
                 biggest = len(str(value)) + len(str(key))
         return biggest + 5
             
-
 def table(header, data):                            
     separator = '+' + '='*table_width(header, data) + '+'
     print('\n' + separator)
