@@ -180,7 +180,8 @@ class Test_Remove_From_Table(unittest.TestCase):
             print("Remove from table test --> SUCCESS")
         except Exception:
             print("Remove from table test --> FAILURE")
-    
+
+
 
 if __name__ == "__main__":
     unittest.main()
