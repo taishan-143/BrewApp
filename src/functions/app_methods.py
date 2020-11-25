@@ -30,7 +30,7 @@ def access_preferences():
     try:
         connection = pymysql.connect(
             host = 'localhost',
-            port = 33066, 
+            port = 33068, 
             user = 'root', 
             passwd = 'Qazwsx11',
             database = "Brew_App"
@@ -56,20 +56,27 @@ def display_preferences(data):
 
 
 def Load_People():
-    connection = pymysql.connect(
-        host = 'localhost',
-        port = 33066, 
-        user = 'root', 
-        passwd = 'Qazwsx11',
-        database = "Brew_App"
-        )
-    cursor = connection.cursor()
-    cursor.execute("SELECT PersonID, Person_First_Name, Person_Surname FROM Person")
-    connection.commit()
-    rows = cursor.fetchall()
-    cursor.close()
-    connection.close()
+    # Establish connection to MySQL Database
+    try:
+        connection = pymysql.connect(
+            host = 'localhost',
+            port = 33068, 
+            user = 'root', 
+            passwd = 'Qazwsx11',
+            database = "Brew_App"
+            )
+        cursor = connection.cursor()
+        # Select the person data
+        cursor.execute("SELECT PersonID, Person_First_Name, Person_Surname FROM Person")
+        connection.commit()
+        rows = cursor.fetchall()
+        cursor.close()
+    except Exception as ERROR:
+        print("Execution Issue: " + str(ERROR))
+    finally:
+        connection.close()
 
+    # Generate the dictionary of: {person_ID:'person_full_name'}
     people_dic_list = []
     for row in rows:
         list_row = list(row)
@@ -84,7 +91,7 @@ def Load_People():
 def Load_Drinks():
     connection = pymysql.connect(
         host = 'localhost',
-        port = 33066, 
+        port = 33068, 
         user = 'root', 
         passwd = 'Qazwsx11',
         database = "Brew_App"
@@ -175,7 +182,7 @@ def clear():
 def connect_to_database():
     connection = pymysql.connect(
         host = 'localhost',
-        port = 33066, 
+        port = 33068, 
         user = 'root', 
         passwd = 'Qazwsx11',
         database = "Brew_App"
